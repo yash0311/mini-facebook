@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="col-md-8">
+    <h2>Home</h2>
+    <form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Submit</button>
+    <p>
+    {% for post in posts %}
+    {% if post.user in friends or post.user == user  %}
+    <h1>{{post.post}}</h1>
+    <p>Posted by {{post.user.get_full_name}} on {{post.created}}</p>
+    {% endif %}
+    {% endfor %}
+    </p>
+    </form>
+
+</div>
+<div class="col-md-4">
+    <h2>Other people</h2>
+    {% for user in users %}
+    <a href="{% url 'accounts:view_profile_with_pk' pk=user.pk %}" ><h3>{{user.username}}</h3></a>
+
+    {% if not user in friends %}
+    <a href="{% url 'home:change_friend' pk=user.pk operation='add' %}">
+    <button class="btn btn-success">Add friend</button>
+    </a>
+    {% endif %}
+
+    {% endfor %}
+    <h2>Friends</h2>
+    {% if friends %}
+    {% for friend in friends %}
+    <a href="{% url 'accounts:view_profile_with_pk' pk=friend.pk %}" ><h3>{{friend.username}}</h3></a>
+
+    <a href="{% url 'home:change_friend' pk=friend.pk operation='remove' %}">
+    <button class="btn btn-default">Remove friend</button>
+    </a>
+
+    <button class="btn btn-info" onclick="addInput() ">Message</button>
+    {% endfor %}
+    {% endif %}
+</div>
+
+<span id="responce"></span>
+<script>
+var countBox =1;
+var boxName = 0;
+function addInput()
+{
+    var csrftoken = '{{ csrf_token }}';
+     var boxName="textBox"+countBox;
+document.getElementById('responce').innerHTML+='' + '<br/>' + '<form method="post" action="/home/message/">' +
+ csrftoken + '<input type="text" id="'+boxName+'" value="'+boxName+'" "  /><br/> ' +
+ '<input type="submit" value="Submit"></form> <br/>';
+     countBox += 1;
+}
+</script>
+
+{% endblock %}
