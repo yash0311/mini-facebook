@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
-
+#add mutual friend model here 
+#add profile model for user
 
 class Post(models.Model):
     post=models.CharField(max_length=100)
@@ -26,7 +27,7 @@ class Friend(models.Model):
         friend, created = cls.objects.get_or_create(current_user=current_user)
         friend.users.remove(new_friend)
 
-
+#add date and time 	field for messages model
 class Messages(models.Model):
     content=models.CharField(max_length=500)
 
