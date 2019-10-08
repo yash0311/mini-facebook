@@ -5,7 +5,7 @@ from django.contrib.auth.views import (
     password_reset_confirm,password_reset
 )
 from .views import register,profile,profile_edit,change_password
-
+#add urls for all apps
 urlpatterns = [
 
     url(r'^login/$', login,{'template_name':"accounts/login.html"},name='login'),
